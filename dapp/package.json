@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@dipdup/tzkt-api": "^0.0.1",
     "@taquito/beacon-wallet": "^12.1.0",
     "@taquito/taquito": "^12.1.0",
     "@testing-library/jest-dom": "^5.14.1",

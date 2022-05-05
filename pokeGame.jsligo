@@ -1,0 +1,13 @@
+type storage = unit;
+
+type parameter =
+| ["Poke"];
+
+type return_ = [list<operation>, storage];
+
+let main = ([action, store] : [parameter, storage]) : return_ => {
+    return match (action, {
+        Poke: () => poke(store)
+    } 
+    )
+};

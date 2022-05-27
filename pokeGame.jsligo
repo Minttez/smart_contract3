@@ -8,6 +8,10 @@ export type storage = {
     feedback : string
 };
 
+type pokeMessage = {
+  receiver : string,
+  feedback : string
+};
 export type return_ = [list<operation>, storage];
 
 type returned_feedback = [address, string]; //address that gives feedback and a string message

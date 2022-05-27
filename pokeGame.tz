@@ -1,4 +1,80 @@
-{ parameter unit ;
-  storage (set address) ;
-  code { CDR ; PUSH bool True ; SOURCE ; UPDATE ; NIL operation ; PAIR } }
+{ parameter
+    (or (or (contract %getFeedback (pair address string)) (unit %poke))
+        (or (address %pokeAndGetFeedback)
+            (pair %pokeAndGetFeedbackCallback address string))) ;
+  storage
+    (pair (string %feedback)
+          (map %pokeTraces address (pair (string %feedback) (address %receiver)))) ;
+  code { UNPAIR ;
+         IF_LEFT
+           { IF_LEFT
+               { PUSH mutez 0 ;
+                 DUP 3 ;
+                 CAR ;
+                 SELF_ADDRESS ;
+                 PAIR ;
+                 TRANSFER_TOKENS ;
+                 SWAP ;
+                 NIL operation ;
+                 DIG 2 ;
+                 CONS ;
+                 PAIR }
+               { DROP ;
+                 SELF_ADDRESS ;
+                 PUSH string "" ;
+                 PAIR ;
+                 SWAP ;
+                 DUP ;
+                 DUG 2 ;
+                 CDR ;
+                 SWAP ;
+                 SOME ;
+                 SOURCE ;
+                 UPDATE ;
+                 SWAP ;
+                 CAR ;
+                 PAIR ;
+                 NIL operation ;
+                 PAIR } }
+           { IF_LEFT
+               { DUP ;
+                 DUG 2 ;
+                 UNIT ;
+                 VIEW "feedback" string ;
+                 IF_NONE
+                   { DROP 2 ;
+                     PUSH string "Cannot find view feedback on given oracle address" ;
+                     FAILWITH }
+                   { SWAP ;
+                     DUP ;
+                     DUG 2 ;
+                     CDR ;
+                     DIG 3 ;
+                     DIG 2 ;
+                     PAIR ;
+                     SOME ;
+                     SOURCE ;
+                     UPDATE ;
+                     SWAP ;
+                     CAR ;
+                     PAIR ;
+                     NIL operation ;
+                     PAIR } }
+               { SWAP ;
+                 DUP ;
+                 CDR ;
+                 DUP 3 ;
+                 CAR ;
+                 DIG 3 ;
+                 CDR ;
+                 PAIR ;
+                 SOME ;
+                 SOURCE ;
+                 UPDATE ;
+                 SWAP ;
+                 CAR ;
+                 PAIR ;
+                 NIL operation ;
+                 PAIR } } } ;
+  view "feedback" unit string { CDR ; CAR } }
 

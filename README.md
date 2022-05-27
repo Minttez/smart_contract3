@@ -1,6 +1,6 @@
 # Aje Success
 
-Followed the instructions to build advanced dapp from tezoz training.
+Followed the instructions to build advanced dapp from tezos training.
 
 ---
 title: Training dapp n°2
